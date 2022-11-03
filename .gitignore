@@ -254,6 +254,30 @@ dist
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
 
+# Ignore package-lock.json
+package.json
+package-lock.json
+.DS_Store
+
+# ignore all zip files
+*.zip
+
+# ignore macos files
+__MACOSX
+
+# ignore large files
+Cell_Phones_*
+
+# ignore all docx files
+*.docx
+
+# ignore all epub files
+*.epub
+
+# ignore all vagrant related files
+.vagrant/
+Vagrantfile
+
 # yarn v2
 .yarn/cache
 .yarn/unplugged
@@ -261,3 +285,10 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# ignore all files larger than 100MB
+./.git/objects/87/tmp_obj_VFRFto
+./2216/Week1/lecture1-instructions.mp4.zip
+./2520/week8/Cell_Phones_and_Accessories.json
+./2520/week8/Cell_Phones_and_Accessories.tar.gz
+./2620/Week2/centos_8_base.ova
+./2620/Week2/instr_rtr.ova
