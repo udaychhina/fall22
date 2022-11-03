@@ -1,0 +1,30 @@
+{
+    "name": "Example collection",
+    "shapes": [
+        {
+            "type": "circle",
+            "dimensions": [10],
+            "color": "blue"
+        },
+        {
+            "type": "rectangle",
+            "dimensions": [28, 63],
+            "color": "red"
+        },
+        {
+            "type": "square",
+            "dimensions": [50],
+            "color": "green"
+        },
+        {
+            "type": "circle",
+            "dimensions": [42],
+            "color": "red"
+        },
+        {
+            "type": "rectangle",
+            "dimensions": [12, 34],
+            "color": "purple"
+        }
+    ]
+}

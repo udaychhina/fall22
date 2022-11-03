@@ -1,0 +1,59 @@
+﻿Darren Cheng A00992071
+Uday Chhina A01210638
+ACIT 2420 Linux Cheat Sheet W9 Quiz
+Exit Codes
+* every command generates an exit code.
+* echo $? to get the exit code of the previous command
+   * 0 is successful
+   * 1 is generic error code
+   * developers may use more exit codes.
+Case
+* more efficient way of doing if conditionals
+* used to check a number of cases
+* case is case sensitive
+   * use tr to convert everything to a certain case
+case [check] in 
+ case1|case1)         
+   [command]         
+   ;; 
+ case3) 
+   [command]         
+   ;; 
+ *)         
+   [command]         
+   ;; 
+esac
+Options
+* Option = arguments that manipulate script behaviour 
+   * Straight options “a”= can be manipulated w/ option arguments
+   * Option arguments “b:”= specifiers of the option 
+* getopts built-in function - evaluates string that’s provided + conducts while iterations over it 
+   * Placed in temporary variable opts
+* Eg. while getopts “ab:” opts -> evaluates the 2 options “a” + “b”; placed in opts while being evaluated 
+Variables in Functions
+* Variables always have global scope unless specified otherwise via “local” keyword
+set
+* Allows for certain functionalities in scripts to be enabled/disabled
+* Specified in 2 ways:
+   * Using an option
+   * Using set -o option-name
+* Useful Options:
+CMD
+	Output
+	set -x
+	Enable option
+	set +x
+	Disable option
+	-e 
+	Exit script once command fails
+	-i
+	Runs script interactive mode
+	-v 
+	Runs script in verbose mode
+	-x 
+	Runs script in verbose mode + expands commands 
+	
+
+* bash -x
+   * Similar to set cmd but debugs entire script 
+   * Enables debugging code from within script + can run on any script

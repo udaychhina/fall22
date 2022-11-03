@@ -1,0 +1,1 @@
+{"name": "BCIT", "students": [{"name": "Tim", "student_id": "A01234567", "grades": [0, 100]}, {"name": "Bob", "student_id": "A01010101", "grades": [67, 99]}, {"name": "John", "student_id": "A33333333", "grades": []}]}

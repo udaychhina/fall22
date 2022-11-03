@@ -1,0 +1,2 @@
+The user input is: (10, 10), (10, 10).
+The distance between your two points: (10, 10), (10, 10) is 0.000.
