@@ -292,3 +292,11 @@ Vagrantfile
 ./2520/week8/Cell_Phones_and_Accessories.tar.gz
 ./2620/Week2/centos_8_base.ova
 ./2620/Week2/instr_rtr.ova
+
+# ignore irrelevant R files
+.Rhistory
+.RData
+
+# ignore jpeg files
+*.jpeg
+*.jpg
