@@ -1,0 +1,41 @@
+#!/bin/bash
+#: Title       : mount_info
+#: Date        : Oct 28 2022
+#: Author      : Uday Chhina
+#: Version     : 1.0
+#: Description : Find if fs or devices are mounted to display information 
+#: Options     : None
+#######################################
+# Print a Usage message.
+# Arguments:
+#   None
+# Outputs:
+#   Write a help message
+#######################################
+usage() {
+  echo -e "Usage: mount-info \e[4mDEVICE|FILESYSTEM\e[0m" >&2
+  echo 'Print info about the Device or the Filesystem'
+  exit 1
+}
+
+# Confirm that the user is passing in an argument
+# If not, print usage message
+if [[ $# -lt 1 ]]; then
+  usage
+fi
+
+# Store the device/filesystem name and get df command output
+MOUNT_NAME=$1
+INFO=$(df -h $1 2> /dev/null)
+
+# If df exited with error, the file system or device doesn't exist
+if [[ $? -eq 1 ]]; then
+  echo The given filesystem or device doesn\'t exist
+  exit 1
+else
+  # Store required info in variables to print with echo
+  PERCENTAGE=$(echo "$INFO" | awk 'NR>1 {print $5}')
+  AVAIL_MEM=$(echo "$INFO" | awk 'NR>1 {print $4}')
+  echo "$MOUNT_NAME is $PERCENTAGE used with $AVAIL_MEM free." 
+  exit 0
+fi
