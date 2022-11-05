@@ -1,0 +1,137 @@
+#!/bin/bash
+#: Title       : backup
+#: Date        : Oct 28 2022
+#: Author      : Uday Chhina
+#: Version     : 1.0
+#: Description : Backup a directory or directories. 
+#: Options     : -d for giving the directories for backing up
+#:               -b for the the directory to backup into
+#:               -n to provide a name for the backup
+#:               -R to decompress
+#:               -o to decompress to given folder
+#:               -h to get help message.
+#######################################
+# Print a Usage message.
+# Arguments:
+#   None
+# Outputs:
+#   Write a help message
+#######################################
+usage() {
+  echo -e "Usage: backup [-d|-b|-n|-R] \e[4mARGUMETS\e[0m" >&2
+  echo 'Back up directories or files using tar and xz. Optional decompress as well'
+  echo '-d   directories to backup (-d dir1 -d dir2)'
+  echo '-b   location of the backup'
+  echo '-n   name of the backup'
+  echo '-R   decompress given archive [Decompression destination]'
+  exit 1
+}
+
+DEFAULT_LOCATION=true
+DEFAULT_NAME=true
+BAK_NAME="backup_$(date +%F).tar.gz"
+LOCATION=${HOME}/backups
+DECOMPRESS=false
+ARCHIVE=
+
+if [[ ! -d $LOCATION ]]; then
+  mkdir ${LOCATION}
+fi
+
+#######################################
+# Creates an archive
+# Arguments:
+#   None
+# Outputs:
+#   Write a message telling the user
+#   the backup was successful and the
+#   location of the backup.
+#######################################
+create_archive() {
+  if [[ $DEFAULT_LOCATION = "true" ]] && [[ $DEFAULT_NAME = "true" ]]; then
+    tar -cvzf ${BAK_NAME} ${DIRS[*]}
+    xz -v ${BAK_NAME}
+    mv "$BAK_NAME.xz" $LOCATION
+  elif [[ $DEFAULT_LOCATION = "false" ]] && [[ $DEFAULT_NAME = "true" ]]; then
+    tar -cvzf ${BAK_NAME} ${DIRS[*]}
+    xz -v ${BAK_NAME}
+    mv "$BAK_NAME.xz" $LOCATION
+  elif [[ $DEFAULT_LOCATION = "true" ]] && [[ $DEFAULT_NAME = "false" ]]; then
+    tar -cvzf ${BAK_NAME} ${DIRS[*]}
+    xz -v ${BAK_NAME}
+    mv "$BAK_NAME.xz" $LOCATION
+  elif [[ $DEFAULT_LOCATION = "false" ]] && [[ $DEFAULT_NAME = "false" ]]; then
+    tar -cvzf ${BAK_NAME} ${DIRS[*]}
+    xz -v ${BAK_NAME}
+    mv "$BAK_NAME.xz" $LOCATION
+  fi
+  echo "Backup complete ($BAK_NAME.xz) and saved in $LOCATION"
+}
+
+#######################################
+# Decompresses a file
+# Arguments:
+#   Optional argument for the destinaton
+#   of the extracted files.
+# Outputs:
+#   Outputs a message when the
+#   extraction if complete.
+#######################################
+decompress_archive() {
+  if [[ $# = 0 ]]; then
+    xz -d ${ARCHIVE}
+    tar -xzvf ${ARCHIVE%.*}
+  else
+    xz -d ${ARCHIVE}
+    tar -xzvf ${ARCHIVE%.*} -C $1
+  fi
+  echo "Decompression successful"
+}
+
+
+while getopts :d:b:n:R:h opt; do
+  case "${opt}" in
+    d) # names of dirs to backup
+      DIRS+=("$OPTARG")
+      ;;
+    b) # the directory to backup into
+      LOCATION=${OPTARG}
+      DEFAULT_LOCATION=false
+      if [[ ! -d $LOCATION ]]; then
+        mkdir $LOCATION
+      fi
+      ;;
+    n) # name of the backup
+      BAK_NAME="${OPTARG}.tar.gz"
+      DEFAULT_NAME=false
+      ;;
+    R) # decompress
+      ARCHIVE=${OPTARG}
+      DECOMPRESS=true
+      ;;
+    h) # help
+      usage
+      ;;
+    \?) # invalid options
+      usage
+      ;;
+  esac
+done
+shift $((OPTIND -1))
+
+
+# if the decompress option is set to false,
+# create an archive. Else, decompress archive
+if [[ $DECOMPRESS = "false" ]]; then
+  create_archive
+else
+  if [[ $# != 0 ]]; then
+    if [[ ! -d $1 ]]; then
+      mkdir $1
+    fi
+    decompress_archive $1
+  else
+    decompress_archive
+  fi
+fi
+

@@ -20,6 +20,17 @@ usage() {
   exit 1
 }
 
+#######################################
+# log additional messages
+# Arguments:
+#   message to log
+# Outputs:
+#   log message passed as argument
+#######################################
+err() {
+  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >&2
+}
+
 # Variables to use in printing system info
 HOSTNAME=$(hostname | awk '{ print $1 }' FS=.)
 USER=$(whoami)
@@ -89,7 +100,7 @@ while getopts "t" opt; do
       PRINT_VER="print_tux"
       ;;
     \?)
-      echo "Error: Invalid Option"
+      err "Error: Invalid Option"
       usage
       exit 1
       ;;

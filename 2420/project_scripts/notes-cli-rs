@@ -8,6 +8,26 @@
 #:               -m for searching with titles
 #:               -d for searching with dates
 
+#######################################
+# log error messages
+# Arguments:
+#   message to log
+# Outputs:
+#   log message passed as argument
+#######################################
+err() {
+  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >&2
+}
+
+#######################################
+# Find the notes matching the search
+# and print them out. 
+# Arguments:
+#   None
+# Outputs:
+#   The files containing the search
+#   term. 
+#######################################
 find() {
   NOTE=$(grep -rl $1 ~/notes/* | awk '{ print $5 }' FS=/)
   echo "The following files match the search term: "
@@ -16,6 +36,13 @@ find() {
   done
 }
 
+#######################################
+# Print a Usage message.
+# Arguments:
+#   None
+# Outputs:
+#   Write a help message
+#######################################
 usage() {
   echo -e "Usage: notes-cli-rs [-t|-m|-d] \e[4mNOTE_NAME\e[0m"
   echo 'Description: Read and search for notes.'
@@ -26,7 +53,7 @@ usage() {
 }
 
 
-# OPTIONS
+# OPTIONS HANDLING
 while getopts "t:m:d:" opt; do
   case ${opt} in
     t) #find with tags
@@ -57,6 +84,6 @@ if [[ -f $HOME/notes/$1 ]]; then
   echo -e "\e[4mContents of $1:\e[0m"
   cat $HOME/notes/$1
 else
-  echo "Error: $1 doesn't exist."
+  err "Error: $1 doesn't exist."
   exit 1
 fi
