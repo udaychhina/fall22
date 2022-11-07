@@ -300,3 +300,9 @@ Vagrantfile
 # ignore jpeg files
 *.jpeg
 *.jpg
+./.git/objects/87/tmp_obj_VFRFto
+./2216/Week1/lecture1-instructions.mp4.zip
+./2520/week8/cellphone.ndjson
+./2520/week8/Cell_Phones_and_Accessories.tar.gz
+./2620/Week2/centos_8_base.ova
+./2620/Week2/instr_rtr.ova
