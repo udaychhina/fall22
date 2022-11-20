@@ -1,0 +1,9 @@
+[Unit]
+Description=use curl and wttr.in to get the weather for Vancouver everyday at 5:00
+
+[Service]
+Type=oneshot
+ExecStart=/opt/weather/weather
+
+[Install]
+WantedBy=multi-user.target

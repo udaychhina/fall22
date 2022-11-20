@@ -1,0 +1,11 @@
+[Unit]
+Description=Timer to run the script to backup directories from server one to backup server at fridays 1 am
+
+[Timer]
+Unit=backup.service
+OnCalendar=Fri *-*-* 01:00:00
+Persistent=true
+RandomizedDelaySec=10
+
+[Install]
+WantedBy=timers.target

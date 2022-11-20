@@ -1,0 +1,9 @@
+[Unit]
+Description=Backup directories read from a config file to the given IP address
+
+[Service]
+Type=oneshot
+ExecStart=/opt/backup/backup
+
+[Install]
+WantedBy=multi-user.target

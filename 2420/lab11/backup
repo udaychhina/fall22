@@ -1,0 +1,3 @@
+#!/bin/bash
+. /opt/backup/backup_config
+rsync -aP "${DIRS[@]}" "dalinar@${IP}:~/" -e "ssh -i /home/kelsier/.ssh/backup_key -o StrictHostKeyChecking=no"
