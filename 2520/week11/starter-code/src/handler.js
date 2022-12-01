@@ -42,10 +42,10 @@ function handler(request, response) {
 
     if (pathname.includes(".jpeg")) {
         response.writeHead(200, JPEG_IMAGE_HEADER)
-        createReadStream(path.join(__dirname, pathname)).pipe(response)
+        return createReadStream(path.join(__dirname, pathname)).pipe(response)
     } else if (pathname.includes(".png")) {
         response.writeHead(200, PNG_IMAGE_HEADER)
-        createReadStream(path.join(__dirname, pathname)).pipe(response)
+        return createReadStream(path.join(__dirname, pathname)).pipe(response)
     }
 
     const key = `${pathname}:${method.toLowerCase()}`;

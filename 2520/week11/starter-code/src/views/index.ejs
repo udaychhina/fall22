@@ -6,6 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profiles</title>
+    <script defer>
+        function submit() {
+            document.forms["uploadImage"].submit()
+        }
+    </script>
 </head>
 <header>
     <h1>Instagram</h1>
@@ -16,9 +21,8 @@
     <div class="user-card" style="border: 1px black solid;">
         <img src="/photos/<%= user.username %>/profile.jpeg" alt="profile pic"
         style="height: 50px; width: auto;">
-        <form action="/form" method="post">
-            <input type="file">
-            <button type="submit">Submit</button>
+        <form action="/images?username=<%= user.username %>" method="POST" enctype="multipart/form-data" name="uploadImage" id="uploadImage">
+            <input type="file" name="image" onchange="javascript: submit()" />
         </form>
         <h3><a href="/feed?username=<%= user.username %>"><%= user.username %></a></h3>
     </div>
