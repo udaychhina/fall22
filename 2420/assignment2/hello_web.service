@@ -1,0 +1,16 @@
+[Unit]
+Description=Web server for 2420 lab
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/home/kelsier/.volta/bin/node /var/www/146.190.3.43/src/index.js
+ExecReload=/home/kelsier/.volta/bin/node /var/www/146.190.3.43/src/index.js
+User=kelsier
+Group=kelsier
+Restart=on-failure
+RestartSec=15
+TimeoutSec=10
+
+[Install]
+WantedBy=multi-user.target
