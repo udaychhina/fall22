@@ -13,24 +13,27 @@ def main():
     window.fill((0, 0, 0))
 
     # Create a Pygame surface, and fill it a solid color
-    background = pygame.Surface((500, 500))
-    background.fill(black)
+    # background = pygame.Surface((500, 500))
+    # background.fill(black)
 
-    pygame.draw.circle(background, white, (150, 100), 25)
-    pygame.draw.circle(background, white, (350, 100), 25)
-    # pygame.draw.arc(background, (160, 60, 210), pygame.Rect(100, 350, 300, 50), 3.14159, 0, 50)
+    # pygame.draw.circle(background, white, (150, 100), 25)
+    # pygame.draw.circle(background, white, (350, 100), 25)
+    # # pygame.draw.arc(background, (160, 60, 210), pygame.Rect(100, 350, 300, 50), 3.14159, 0, 50)
 
-    # Display the surface in the window
-    window.blit(background, (0, 0))
+    # # Display the surface in the window
+    # window.blit(background, (0, 0))
 
-    surface_two = pygame.Surface((300, 100))
-    surface_two.fill(black)
+    # surface_two = pygame.Surface((300, 100))
+    # surface_two.fill(black)
 
-    pygame.draw.circle(surface_two, white, (150, -100), 200)
-    pygame.draw.circle(surface_two, black, (150, -150), 220)
-    window.blit(surface_two, (100, 300))
-    # Update the display
-    pygame.display.update()
+    # pygame.draw.circle(surface_two, white, (150, -100), 200)
+    # pygame.draw.circle(surface_two, black, (150, -150), 220)
+    # window.blit(surface_two, (100, 300))
+    # # Update the display
+    # pygame.display.update()
+    surface = pygame.Surface((200,200))
+    surface.fill((0,255, 0))
+    pygame.draw.circle(surface, (0, 0, 255), (600, 600), 100)
 
     # Event loop
     running = True
@@ -40,6 +43,8 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+        window.blit(surface, (0,0))
+        pygame.display.update()
 
 
 if __name__ == "__main__":

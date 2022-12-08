@@ -1,0 +1,111 @@
+#!/bin/bash
+#: Title       : sys_info
+#: Date        : Oct 28 2022
+#: Author      : Uday Chhina
+#: Version     : 1.0
+#: Description : Show system info. 
+#: Options     : -t for showing the tux ascii image art
+
+#######################################
+# Print a Usage message.
+# Arguments:
+#   None
+# Outputs:
+#   Write a help message
+#######################################
+usage() {
+  echo "Usage: sys-info [-t]"
+  echo 'Print the system info'
+  echo '  -t: Print the system info with Tux'
+  exit 1
+}
+
+#######################################
+# log additional messages
+# Arguments:
+#   message to log
+# Outputs:
+#   log message passed as argument
+#######################################
+err() {
+  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >&2
+}
+
+# Variables to use in printing system info
+HOSTNAME=$(hostname | awk '{ print $1 }' FS=.)
+USER=$(whoami)
+UPTIME=$(awk '{printf("%d:%02d:%02d:%02d\n",($1/60/60/24),($1/60/60%24),($1/60%60),($1%60))}' /proc/uptime)
+DISTRO=$(cat /etc/os-release | awk 'NR<2 { print $2 }' FS='"' OFS='"')
+KERNEL_NAME=$(uname -s)
+KERNEL_VER=$(uname -r)
+USER_SHELL=$(echo $SHELL | awk '{ print $3 }' FS=/)
+PACKAGES=$(dpkg --get-selections | grep -cv deinstall)
+MEM_AVAIL=$(free -h | awk 'NR>1 && NR<3 { print $7 }')
+MEM_USED=$(free -h | awk 'NR>1 && NR<3 { print $3 }')
+
+#COLORS
+CYAN_BOLD='\033[1;36m'
+PURPLE_BOLD='\033[1;35m'
+COLOR_END='\033[0m'
+
+# The type of output required, default is no tux
+PRINT_VER="print_no_tux"
+
+#######################################
+# Print the system info with the tux
+# Arguments:
+#   None
+# Outputs:
+#   The Linux tux, with system info
+#######################################
+print_tux () {
+  clear
+  printf "${PURPLE_BOLD}%18s${CYAN_BOLD}%-14s ${COLOR_END}%-10s\n" \
+  "        .--.     " "Host:" "${HOSTNAME}" \
+  "       |o_o |    " "User:" "${USER}" \
+  "       |:_/ |    " "Uptime:" "${UPTIME}" \
+  "      //   \ \   " "Distro:" "${DISTRO}" \
+  "     (|     | )  " "Kernel:" "${KERNEL_NAME} ${KERNEL_VER}" \
+  "    /'\_   _/\`\  " "Shell:" "${USER_SHELL}" \
+  "    \___)=(___/  " "Packages:" "${PACKAGES}" \
+  " " "Mem Available:" "${MEM_AVAIL}" \
+  " " "Mem Used:" "${MEM_USED}" 
+}
+
+#######################################
+# Print the system info without the tux
+# Arguments:
+#   None
+# Outputs:
+#   The system info
+#######################################
+print_no_tux () {
+  clear
+  printf "${CYAN_BOLD}%-14s ${COLOR_END}%-10s\n" \
+  "Host:" "${HOSTNAME}" \
+  "User:" "${USER}" \
+  "Uptime:" "${UPTIME}" \
+  "Distro:" "${DISTRO}" \
+  "Kernel:" "${KERNEL}" \
+  "Shell:" "${USER_SHELL}" \
+  "Packages:" "${PACKAGES}" \
+  "Mem Available:" "${MEM_AVAIL}" \
+  "Mem Used:" "${MEM_USED}" 
+}
+
+
+while getopts "t" opt; do
+  case "${opt}" in 
+    t)
+      PRINT_VER="print_tux"
+      ;;
+    \?)
+      err "Error: Invalid Option"
+      usage
+      exit 1
+      ;;
+  esac
+done
+
+$PRINT_VER
+exit 0

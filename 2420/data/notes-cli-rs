@@ -1,0 +1,89 @@
+#!/bin/bash
+#: Title       : notes_cli_rs
+#: Date        : Oct 28 2022
+#: Author      : Uday Chhina
+#: Version     : 1.0
+#: Description : Read and search for notes. 
+#: Options     : -t for searching with tags
+#:               -m for searching with titles
+#:               -d for searching with dates
+
+#######################################
+# log error messages
+# Arguments:
+#   message to log
+# Outputs:
+#   log message passed as argument
+#######################################
+err() {
+  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >&2
+}
+
+#######################################
+# Find the notes matching the search
+# and print them out. 
+# Arguments:
+#   None
+# Outputs:
+#   The files containing the search
+#   term. 
+#######################################
+find() {
+  NOTE=$(grep -rl $1 ~/notes/* | awk '{ print $5 }' FS=/)
+  echo "The following files match the search term: "
+  for file in ${NOTE[@]}; do
+    echo "$file"
+  done
+}
+
+#######################################
+# Print a Usage message.
+# Arguments:
+#   None
+# Outputs:
+#   Write a help message
+#######################################
+usage() {
+  echo -e "Usage: notes-cli-rs [-t|-m|-d] \e[4mNOTE_NAME\e[0m"
+  echo 'Description: Read and search for notes.'
+  echo '-t   Search for tags.'
+  echo '-m   Search for title.'
+  echo '-d   Search for date.'
+  exit 1
+}
+
+
+# OPTIONS HANDLING
+while getopts "t:m:d:" opt; do
+  case ${opt} in
+    t) #find with tags
+      find ${OPTARG}
+      exit 0
+      ;;
+    m) #find with title
+      find ${OPTARG}
+      exit 0
+      ;;
+    d) #find with date
+      find ${OPTARG}
+      exit 0
+      ;;
+    \?) # invalid options
+      echo "Error: Invalid option(s)."
+      exit 1
+      ;;
+  esac
+done
+
+if [[ $# = 0 ]]; then
+  usage
+fi
+
+# DEFAULT BEHAVIOR
+if [[ -f $HOME/notes/$1 ]]; then
+  echo -e "\e[4mContents of $1:\e[0m"
+  cat $HOME/notes/$1
+else
+  err "Error: $1 doesn't exist."
+  exit 1
+fi

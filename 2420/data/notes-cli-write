@@ -1,0 +1,68 @@
+#!/bin/bash
+#: Title       : notes_cli_write
+#: Date        : Oct 28 2022
+#: Author      : Uday Chhina
+#: Version     : 1.0
+#: Description : Write notes. 
+#: Options     : None
+
+#######################################
+# log additional messages
+# Arguments:
+#   message to log
+# Outputs:
+#   log message passed as argument
+#######################################
+err() {
+  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >&2
+}
+
+# if a user passes a positional arugment, err
+if [[ $# -gt 0 ]]; then
+  err "This script doesn't take any arguments!"
+  exit 1
+fi
+
+# Make the notes directory if it doesn't exit
+if [[ ! -d "$HOME/notes" ]]; then
+  log 'Making /notes directory...'
+  mkdir $HOME/notes
+fi
+
+# Read the user input for title
+read -p $'Please Enter a \e[4mTitle:\e[0m ' TITLE
+
+# Create the filename with the given title, asking again if it already exists.
+if [[ -f $HOME/notes/$TITLE ]]; then
+  err "Error: A note with the same title already exists in the notes folder."
+  read -p $'Please Enter a \e[4mTitle:\e[0m ' TITLE
+fi
+
+touch "$HOME/notes/$TITLE"
+
+
+# Read the tags. 
+echo "Enter tags separated by spaces: "
+echo "Press CTRL+D on new line to finish."
+echo -en "\e[4mTags:\e[0m "
+while IFS=" " read tag
+do
+    TAGS=("${TAGS[@]}" $tag)
+done
+
+
+# Append all the variables for the note in the note file. 
+echo -e "\e[4mTitle\e[0m: $TITLE" >> "${HOME}/notes/${TITLE}"
+echo -en "\e[4mTags\e[0m: " >> "${HOME}/notes/${TITLE}"
+for tag in ${TAGS[@]}; do
+  echo -n "#$tag " >> "${HOME}/notes/${TITLE}"
+done
+echo "" >> "${HOME}/notes/${TITLE}"
+echo -e "\e[4mDate\e[0m: $(date "+%F %H:%M:%S")" >> "${HOME}/notes/${TITLE}"
+
+# Read the not from stdin until CTRL+D is hit. 
+echo "Please enter the note, presss CTRL+D on new line to finish."
+NOTE=$(</dev/stdin)
+echo "$NOTE" >> "${HOME}/notes/${TITLE}" 
+
+exit 0
